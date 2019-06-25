@@ -28,6 +28,6 @@ vms="jenkins jenkins-build python"
 
 for vm in ${vms}; do
 
-	vm create --resource-group myresource --name $vm --image UbuntuLTS --nics mynetworkinterface --admin-username "ferdinand" --size Standard_F1
+	az vm create --resource-group myresource --name $vm --image UbuntuLTS --nics mynetworkinterface --admin-username "ferdinand" --size Standard_F1
 done
 
