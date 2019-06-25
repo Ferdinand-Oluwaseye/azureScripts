@@ -1,0 +1,2 @@
+# azureScripts
+To create vms
