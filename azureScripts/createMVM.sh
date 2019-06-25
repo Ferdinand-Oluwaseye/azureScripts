@@ -16,18 +16,18 @@ az network nsg rule create --resource-group myresource --name SSH --priority 300
 az network public-ip create --resource-group myresource --name mypublicip --dns-name ferdinand1234
 
 #create the network interface card and attach the security group and public ip
-az network nic create --resource-group myresource --name mynetworkinterface --vnet-name myvirtualnetwork --subnet mysubnet --network-security-group mynetworksecuritygroup --public-ip-address mypublicip
+#az network nic create --resource-group myresource --name mynetworkinterface --vnet-name myvirtualnetwork --subnet mysubnet --network-security-group mynetworksecuritygroup --public-ip-address mypublicip
 
 
 #create a vm by attaching the network interface card and specifying a username and password along with the type of machine to make
-vm create --resource-group myresource --name jenkins-Server --image UbuntuLTS --nics mynetworkinterface --admin-username "ferdinand" --size Standard_F1
+#az vm create --resource-group myresource --name jenkins-Server --image UbuntuLTS --nics mynetworkinterface --admin-username "ferdinand" --size Standard_F1
 
 
 
 vms="jenkins jenkins-build python"
 
 for vm in ${vms}; do
-
-	az vm create --resource-group myresource --name $vm --image UbuntuLTS --nics mynetworkinterface --admin-username "ferdinand" --size Standard_F1 --generate-ssh-keys
+	az network nic create --resource-group myresource --name $vm-nics --vnet-name myvirtualnetwork --subnet mysubnet --network-security-group mynetworksecuritygroup --public-ip-address mypublicip
+	az vm create --resource-group myresource --name $vm --image UbuntuLTS --nics $vm-nics --admin-username "ferdinand" --size Standard_F1 --generate-ssh-keys
 done
 
