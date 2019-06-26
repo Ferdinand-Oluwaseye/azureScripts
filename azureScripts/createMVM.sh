@@ -31,6 +31,8 @@ for vm in ${vms}; do
 	az network vnet create --resource-group $vm-resource --name $vm-virtualnetwork --address-prefixes 10.0.0.0/16 --subnet-name $vm-subnet --subnet-prefix 10.0.0.0/24
 	az network nsg create --resource-group $vm-resource --name $vm-nsg
 	az network nsg rule create --resource-group $vm-resource --name SSH --priority 300 --nsg-name $vm-nsg --destination-port-ranges 22
+	az network nsg rule create --resource-group $vm-resource --name Jenkins-Server --priority 400 --nsg-name $vm-nsg --destination-port-ranges 8080
+	az network nsg rule create --resource-group $vm-resource --name Python-Server --priority 500 --nsg-name $vm-nsg --destination-port-ranges 8000
 	az network public-ip create --resource-group $vm-resource --name $vm-ip --dns-name $vm-ferdinand1234
 	az network nic create --resource-group $vm-resource --name $vm-nics --vnet-name $vm-virtualnetwork --subnet $vm-subnet --network-security-group $vm-nsg --public-ip-address $vm-ip
 	az vm create --resource-group $vm-resource --name $vm --image UbuntuLTS --nics $vm-nics --admin-username "ferdinand" --size Standard_F1 --generate-ssh-keys
