@@ -21,6 +21,7 @@
 
 #create a vm by attaching the network interface card and specifying a username and password along with the type of machine to make
 #az vm create --resource-group myresource --name jenkins-Server --image UbuntuLTS --nics mynetworkinterface --admin-username "ferdinand" --size Standard_F1
+
 az group create --name myresourcegroup --location uksouth
 az network vnet create --resource-group myresourcegroup --name virtualnetwork --address-prefixes 10.0.0.0/16 --subnet-name $vm-subnet --subnet-prefix 10.0.0.0/24
 
