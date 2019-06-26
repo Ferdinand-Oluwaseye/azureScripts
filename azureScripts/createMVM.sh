@@ -21,20 +21,20 @@
 
 #create a vm by attaching the network interface card and specifying a username and password along with the type of machine to make
 #az vm create --resource-group myresource --name jenkins-Server --image UbuntuLTS --nics mynetworkinterface --admin-username "ferdinand" --size Standard_F1
-
-
+az group create --name myresourcegroup --location uksouth
+az network vnet create --resource-group myresourcegroup --name virtualnetwork --address-prefixes 10.0.0.0/16 --subnet-name $vm-subnet --subnet-prefix 10.0.0.0/24
 
 vms="jenkins jenkins-build python"
 
 for vm in ${vms}; do
-	az group create --name $vm-resource --location uksouth
-	az network vnet create --resource-group $vm-resource --name $vm-virtualnetwork --address-prefixes 10.0.0.0/16 --subnet-name $vm-subnet --subnet-prefix 10.0.0.0/24
-	az network nsg create --resource-group $vm-resource --name $vm-nsg
-	az network nsg rule create --resource-group $vm-resource --name SSH --priority 300 --nsg-name $vm-nsg --destination-port-ranges 22
-	az network nsg rule create --resource-group $vm-resource --name Jenkins-Server --priority 400 --nsg-name $vm-nsg --destination-port-ranges 8080
-	az network nsg rule create --resource-group $vm-resource --name Python-Server --priority 500 --nsg-name $vm-nsg --destination-port-ranges 8000
-	az network public-ip create --resource-group $vm-resource --name $vm-ip --dns-name $vm-ferdinand1234
-	az network nic create --resource-group $vm-resource --name $vm-nics --vnet-name $vm-virtualnetwork --subnet $vm-subnet --network-security-group $vm-nsg --public-ip-address $vm-ip
-	az vm create --resource-group $vm-resource --name $vm --image UbuntuLTS --nics $vm-nics --admin-username "ferdinand" --size Standard_F1 --generate-ssh-keys
+	
+	
+	az network nsg create --resource-group myresourcegroup --name $vm-nsg
+	az network nsg rule create --resource-group myresourcegroup --name SSH --priority 300 --nsg-name $vm-nsg --destination-port-ranges 22
+	az network nsg rule create --resource-group myresourcegroup --name Jenkins-Server --priority 400 --nsg-name $vm-nsg --destination-port-ranges 8080
+	az network nsg rule create --resource-group myresourcegroup --name Python-Server --priority 500 --nsg-name $vm-nsg --destination-port-ranges 8000
+	az network public-ip create --resource-group myresourcegroup --name $vm-ip --dns-name $vm-ferdinand1234
+	az network nic create --resource-group myresourcegroup --name $vm-nics --vnet-name virtualnetwork --subnet $vm-subnet --network-security-group $vm-nsg --public-ip-address $vm-ip
+	az vm create --resource-group myresourcegroup --name $vm --image UbuntuLTS --nics $vm-nics --admin-username "ferdinand" --size Standard_F1 --generate-ssh-keys
 done
 
